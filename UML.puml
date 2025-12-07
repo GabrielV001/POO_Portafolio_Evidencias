@@ -1,0 +1,335 @@
+@startuml
+class bl.JugadorBL {
+- JugadorDAO jugadorDAO
++ void registrarJugador(Jugador)
++ List<Jugador> listarJugadores()
++ Jugador buscarJugador(String)
++ void actualizarJugador(Jugador)
++ void eliminarJugador(String)
+}
+
+
+class tl.Controller {
+- JugadorBL jugadorBL
+- ParejaBL parejaBL
+- PartidoBL partidoBL
+- Vista vista
++ void iniciar()
+- void gestionarJugadores()
+- void registrarJugador()
+- void listarJugadores()
+- void modificarJugador()
+- void eliminarJugador()
+- void gestionarParejas()
+- void formarPareja()
+- void listarParejas()
+- void eliminarPareja()
+- void gestionarPartidos()
+- void crearPartido()
+- void listarPartidos()
+- void actualizarResultado()
+}
+
+
+class utils.Conexion {
+- {static} String URL
+- {static} String USER
+- {static} String PASSWORD
++ {static} Connection getConnection()
+}
+
+
+interface dl.dao.IDAO {
+~ void insertar(T)
+~ void actualizar(T)
+~ void eliminar(String)
+~ T obtener(String)
+~ List<T> listarTodos()
+}
+
+class ui.Vista {
+- Scanner scanner
++ int mostrarMenuPrincipal()
++ int mostrarMenuJugadores()
++ int mostrarMenuParejas()
++ int mostrarMenuPartidos()
++ String[] pedirDatosJugador()
++ String pedirId(String)
++ String[] pedirDosJugadores()
++ String[] pedirDosParejasParaPartido()
++ String pedirResultado()
++ void mostrarJugadores(List<Jugador>)
++ void mostrarParejas(List<Pareja>)
++ void mostrarPartidos(List<Partido>)
++ void mostrarMensaje(String)
++ void mostrarError(String)
+- int leerEntero()
++ void limpiarPantalla()
++ boolean confirmarAccion(String)
++ void mostrarDetallesPartido(Partido)
++ void mostrarEstadisticas(int,int,int)
++ void cerrar()
+}
+
+
+class bl.ParejaBL {
+- ParejaDAO parejaDAO
++ void registrarPareja(Pareja)
++ List<Pareja> listarParejas()
++ void eliminarPareja(int)
++ Pareja obtenerPareja(String)
+}
+
+
+class dl.dao.JugadorDAO {
++ void insertar(Jugador)
++ void actualizar(Jugador)
++ void eliminar(String)
++ Jugador obtener(String)
++ List<Jugador> listarTodos()
+}
+
+class dl.entities.Partido {
+- int id
+- Pareja pareja1
+- Pareja pareja2
+- String resultado
+- LocalDateTime fechaPartido
+- LocalDateTime fechaRegistro
+- String estado
+- String observaciones
++ int getId()
++ void setId(int)
++ Pareja getPareja1()
++ void setPareja1(Pareja)
++ Pareja getPareja2()
++ void setPareja2(Pareja)
++ String getResultado()
++ void setResultado(String)
++ LocalDateTime getFechaPartido()
++ void setFechaPartido(LocalDateTime)
++ LocalDateTime getFechaRegistro()
++ String getEstado()
++ void setEstado(String)
++ String getObservaciones()
++ void setObservaciones(String)
+- void validarPartido()
+- boolean tieneJugadoresRepetidos()
++ void iniciar()
++ void finalizar(String)
++ void cancelar(String)
++ boolean estaPendiente()
++ boolean estaEnCurso()
++ boolean estaFinalizado()
++ boolean estaCancelado()
++ boolean equals(Object)
++ int hashCode()
++ String toString()
++ Partido clone()
+}
+
+
+class dl.dao.ParejaDAO {
+- JugadorDAO jugadorDAO
++ void insertar(Pareja)
++ void actualizar(Pareja)
++ void eliminar(String)
++ Pareja obtener(String)
++ List<Pareja> listarTodos()
++ List<Pareja> obtenerParejasPorJugador(String)
++ boolean existePareja(String,String)
+}
+
+
+class bl.PartidoBL {
+- PartidoDAO partidoDAO
++ void registrarPartido(Partido)
++ void actualizarResultado(Partido)
++ List<Partido> listarPartidos()
++ Partido obtenerPartido(String)
++ void actualizarPartido(Partido)
+}
+
+
+class dl.entities.Jugador {
+- String id
+- String nombre
+- String nivel
+- LocalDateTime fechaRegistro
+- boolean estado
++ String getId()
++ void setId(String)
++ String getNombre()
++ void setNombre(String)
++ String getNivel()
++ void setNivel(String)
++ LocalDateTime getFechaRegistro()
++ void setFechaRegistro(LocalDateTime)
++ boolean isEstado()
++ void setEstado(boolean)
++ boolean estaActivo()
++ void desactivar()
++ void reactivar()
++ boolean puedeFormarParejaCon(Jugador)
++ boolean equals(Object)
++ int hashCode()
++ String toString()
++ Jugador clone()
+}
+
+
+class dl.dao.PartidoDAO {
+- ParejaDAO parejaDAO
++ void insertar(Partido)
++ void actualizar(Partido)
++ void eliminar(String)
++ Partido obtener(String)
++ List<Partido> listarTodos()
+- Partido crearPartidoDesdeResultSet(ResultSet)
++ List<Partido> obtenerPartidosPorPareja(int)
++ void actualizarResultado(int,String)
++ List<Partido> obtenerPartidosPendientes()
+}
+
+
+class Main {
+- {static} boolean modoDebug
+- {static} boolean modoTest
++ {static} void main(String[])
+- {static} void procesarArgumentos(String[])
+- {static} void configurarAmbiente()
+- {static} void mostrarBanner()
+- {static} void verificarConexion()
+- {static} void ejecutarPruebas()
+- {static} void manejarError(Exception)
+- {static} void realizarLimpieza()
+- {static} void mostrarAyuda()
+}
+
+
+class dl.entities.Pareja {
+- int id
+- Jugador jugador1
+- Jugador jugador2
+- LocalDateTime fechaFormacion
+- boolean estado
++ int getId()
++ void setId(int)
++ Jugador getJugador1()
++ void setJugador1(Jugador)
++ Jugador getJugador2()
++ void setJugador2(Jugador)
++ LocalDateTime getFechaFormacion()
++ void setFechaFormacion(LocalDateTime)
++ boolean isEstado()
++ void setEstado(boolean)
+- void validarPareja()
++ boolean estaActiva()
++ void desactivar()
++ boolean reactivar()
++ String getNivelPromedio()
++ boolean puedeJugarContra(Pareja)
++ boolean equals(Object)
++ int hashCode()
++ String toString()
++ Pareja clone()
++ boolean incluyeJugador(Jugador)
++ Jugador obtenerCompañero(Jugador)
+}
+
+
+class utils.Constants {
++ {static} String DB_URL
++ {static} String DB_USER
++ {static} String DB_PASSWORD
++ {static} String DB_DRIVER
++ {static} String NIVEL_PRINCIPIANTE
++ {static} String NIVEL_INTERMEDIO
++ {static} String NIVEL_AVANZADO
++ {static} String ESTADO_PENDIENTE
++ {static} String ESTADO_EN_CURSO
++ {static} String ESTADO_FINALIZADO
++ {static} String ESTADO_CANCELADO
++ {static} String ERROR_CONEXION_BD
++ {static} String ERROR_CONSULTA_BD
++ {static} String ERROR_DATOS_INVALIDOS
++ {static} String ERROR_REGISTRO_NO_ENCONTRADO
++ {static} String ERROR_REGISTRO_DUPLICADO
++ {static} String ERROR_OPERACION_NO_PERMITIDA
++ {static} String EXITO_REGISTRO
++ {static} String EXITO_ACTUALIZACION
++ {static} String EXITO_ELIMINACION
+}
+
+class utils.Constants$SQL {
++ {static} String INSERT_JUGADOR
++ {static} String UPDATE_JUGADOR
++ {static} String DELETE_JUGADOR
++ {static} String SELECT_JUGADOR
++ {static} String SELECT_ALL_JUGADORES
++ {static} String INSERT_PAREJA
++ {static} String UPDATE_PAREJA
++ {static} String DELETE_PAREJA
++ {static} String SELECT_PAREJA
++ {static} String SELECT_ALL_PAREJAS
++ {static} String SELECT_PAREJAS_POR_JUGADOR
++ {static} String INSERT_PARTIDO
++ {static} String UPDATE_PARTIDO
++ {static} String UPDATE_RESULTADO_PARTIDO
++ {static} String DELETE_PARTIDO
++ {static} String SELECT_PARTIDO
++ {static} String SELECT_ALL_PARTIDOS
++ {static} String SELECT_PARTIDOS_PENDIENTES
++ {static} String SELECT_PARTIDOS_POR_PAREJA
+}
+
+class utils.Constants$Validacion {
++ {static} int MIN_LONGITUD_NOMBRE
++ {static} int MAX_LONGITUD_NOMBRE
++ {static} int MIN_LONGITUD_ID
++ {static} int MAX_LONGITUD_ID
++ {static} String PATRON_ID
++ {static} String PATRON_NOMBRE
+}
+
+class utils.Constants$Config {
++ {static} int MAX_INTENTOS_CONEXION
++ {static} int TIEMPO_ESPERA_CONEXION
++ {static} int MAX_PAREJAS_POR_JUGADOR
++ {static} int MAX_PARTIDOS_POR_DIA
+}
+
+class utils.Constants$Formato {
++ {static} String FORMATO_FECHA
++ {static} String FORMATO_HORA
++ {static} String FORMATO_FECHA_HORA
+}
+
+class utils.Constants$Menu {
++ {static} String TITULO_PRINCIPAL
++ {static} String TITULO_JUGADORES
++ {static} String TITULO_PAREJAS
++ {static} String TITULO_PARTIDOS
++ {static} String TITULO_RESULTADOS
+}
+
+class utils.Constants$Caracteres {
++ {static} String SEPARADOR_LINEA
++ {static} String VIÑETA
++ {static} String FLECHA
++ {static} String MARCA_SELECCION
++ {static} String MARCA_ERROR
+}
+
+
+
+dl.dao.IDAO <|.. dl.dao.JugadorDAO
+dl.dao.IDAO <|.. dl.dao.ParejaDAO
+dl.dao.IDAO <|.. dl.dao.PartidoDAO
+utils.Constants +.. utils.Constants$SQL
+utils.Constants +.. utils.Constants$Validacion
+utils.Constants +.. utils.Constants$Config
+utils.Constants +.. utils.Constants$Formato
+utils.Constants +.. utils.Constants$Menu
+utils.Constants +.. utils.Constants$Caracteres
+@enduml
